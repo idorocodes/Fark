@@ -58,7 +58,7 @@ cargo add fark-actix
         input_data.insert("username".to_string(), "admin".to_string());
         input_data.insert("password".to_string(), "pass".to_string());
 
-        // initialize the autn input struct with the local strategy and the data that should be retuned after the query
+        // initialize the autn input struct with the local strategy and the data 
         let input = AuthInput::Local { data: input_data };
 
             // authenticate user with the data provided in the request
