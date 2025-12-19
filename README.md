@@ -12,7 +12,7 @@
 - OAuth2 Social login (Google, GitHub, etc.)
 - JWT and session support
 - Framework-agnostic core
-- Adapters for Actix, Axum, Rocket
+- Adapters for Actix, Axum, Rocket 
 - Policy-based authorization
 - Extensible strategy plugin system
 
