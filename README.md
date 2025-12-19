@@ -12,7 +12,7 @@
 - OAuth2 Social login (Google, GitHub, etc.)
 - JWT and session support
 - Framework-agnostic core
-- Adapters for Actix, Axum, Rocket 
+- Adapters for Actix, Axum, Rocket
 - Policy-based authorization
 - Extensible strategy plugin system
 
@@ -29,19 +29,63 @@ cargo add fark-actix
 ### Local (email/password) Sign-In
 
 ```rust
-use fark::Fark;
-use fark_actix::Auth;
+    use std::collections::HashMap;
+    use serde_json::json;
+    use fark::*;
 
-let fark = Fark::new()
-    .with_local(|email, password| async move {
-        verify_user(email, password).await
-    });
+    #[tokio::test]
+    async fn test() {
+        let secret = "test_secret".to_string();
 
-#[post("/auth/login")]
-async fn login(auth: Auth, body: LoginRequest) -> impl Responder {
-    let identity = auth.authenticate("local", (body.email, body.password)).await?;
-    HttpResponse::Ok().json(identity)
+        // db query logic
+        let mut fark = Fark::new().with_local(|data: HashMap<String, String>| async move {
+            if data.get("username") == Some(&"admin".to_string())
+                && data.get("password") == Some(&"pass".to_string())
+            {
+                Ok(Identity {
+                    user_id: "123".to_string(),
+                    data: json!({"role": "admin"}),
+                })
+            } else {
+                Err(AuthError::PasswordMismatch)
+            }
+        });
+        // add jwt
+        fark.with_jwt(secret.clone());
+
+        // init query and authenticate
+        let mut input_data = HashMap::new();
+        input_data.insert("username".to_string(), "admin".to_string());
+        input_data.insert("password".to_string(), "pass".to_string());
+
+        // initialize the autn input struct with the local strategy and the data that should be retuned after the query
+        let input = AuthInput::Local { data: input_data };
+
+            // authenticate user with the data provided in the request
+        match fark.authenticate("local", input).await {
+            Ok(identity) => {
+                println!("Authenticated: user_id = {}", identity.user_id);
+                println!("Custom data: {}", identity.data());
+
+
+                     // issue jwt token
+                let token = fark.issue_jwt(identity, 3600).unwrap();
+                println!("Issued JWT: {}", token);
+
+                // verify jwt token
+                match fark.verify_jwt(token) {
+                    Ok(verified) => {
+                        println!("Verified: user_id = {}", verified.user_id);
+                        println!("Verified data: {}", verified.data());
+                    }
+                    Err(e) => println!("Verification failed: {:?}", e),
+                }
+            }
+            Err(e) => println!("Authentication failed: {:?}", e),
+        }
+    }
 }
+
 ```
 
 ### Google OAuth Login
@@ -70,11 +114,11 @@ async fn google_login(auth: Auth, body: JwtToken) -> impl Responder {
 
 ## 🔌 Adapters
 
-| Framework  | Crate          |
-|------------|----------------|
-| Actix Web  | fark-actix     |
-| Axum       | fark-axum      |
-| Rocket     | fark-rocket    |
+| Framework | Crate       |
+| --------- | ----------- |
+| Actix Web | fark-actix  |
+| Axum      | fark-axum   |
+| Rocket    | fark-rocket |
 
 ## 🛠️ Philosophy
 
