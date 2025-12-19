@@ -24,7 +24,7 @@ cargo add fark
 cargo add fark-actix
 ```
 
-## ✨ Quick Start (Actix Web)
+## ✨ Quick Start 
 
 ### Local (email/password) Sign-In
 
