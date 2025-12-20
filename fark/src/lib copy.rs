@@ -6,8 +6,8 @@ use std::collections::HashMap;
 use std::future::Future;
 use std::pin::Pin;
 
-pub mod error;
-pub use error::*;
+mod error;
+use error::*;
 
 #[derive(Debug)]
 pub struct Identity {
@@ -21,20 +21,11 @@ impl Identity {
     }
 }
 
+
 #[derive(Debug)]
 pub enum AuthInput {
-    Local {
-        data: HashMap<String, String>,
-    },
-    Google {
-        client_id: String,
-        client_secret: String,
-        callback_url: String,
-        scope: Vec<String>,
-    },
-    Pin {
-        pin_code: i32,
-    },
+    Local { data: HashMap<String, String> },
+    Oauth { token: String },
 }
 
 pub type Strategy = Box<
@@ -73,47 +64,13 @@ impl Fark {
             "local".into(),
             Box::new(move |input: AuthInput| match input {
                 AuthInput::Local { data } => Box::pin(f(data)),
-                _ => Box::pin(async { Err(error::AuthError::InvalidInput) }),
-            }),
-        );
-
-        self
-    }
-
-    pub fn with_google<F, Fut>(mut self, f: F) -> Self
-    where
-        F: Fn(String, String, String, Vec<String>) -> Fut + Send + Sync + 'static,
-        Fut: Future<Output = Result<Identity, AuthError>> + Send + 'static,
-    {
-        self.strategies.insert(
-            "google".into(),
-            Box::new(move |input: AuthInput| match input {
-                AuthInput::Google {
-                    client_id,
-                    client_secret,
-                    callback_url,
-                    scope,
-                } => Box::pin(f(client_id, client_secret, callback_url, scope)),
                 _ => Box::pin(async { Err(AuthError::InvalidInput) }),
             }),
         );
+
         self
     }
 
-    pub fn with_pin<F, Fut>(mut self, f: F) -> Self
-    where
-        F: Fn(i32) -> Fut + Send + Sync + 'static,
-        Fut: Future<Output = Result<Identity, AuthError>> + Send + 'static,
-    {
-        self.strategies.insert(
-            "pin".into(),
-            Box::new(move |input: AuthInput| match input {
-                AuthInput::Pin { pin_code } => Box::pin(f(pin_code)),
-                _ => Box::pin(async { Err(AuthError::InvalidInput) }),
-            }),
-        );
-        self
-    }
     pub fn with_jwt(&mut self, secret: String) {
         self.secret = secret;
     }

@@ -1,11 +1,8 @@
-
-
-
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
-    use serde_json::json;
     use fark::*;
+    use serde_json::json;
+    use std::collections::HashMap;
 
     #[tokio::test]
     async fn test() {
@@ -17,7 +14,10 @@ mod tests {
             {
                 Ok(Identity {
                     user_id: "123".to_string(),
-                    data: json!({"role": "admin"}),
+                    data: json!({
+                        "role": "admin",
+                        "new_user":true,
+                        "gender": "male"}),
                 })
             } else {
                 Err(AuthError::PasswordMismatch)
