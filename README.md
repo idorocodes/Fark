@@ -6,7 +6,7 @@
 
 > Build once. Use everywhere. No framework coupling.
 
-## 🚀 Features
+##  Features
 
 - Email + Password authentication
 - OAuth2 Social login (Google, GitHub, etc.)
@@ -16,7 +16,7 @@
 - Policy-based authorization
 - Extensible strategy plugin system
 
-## 📦 Installation
+##  Installation
 
 ```bash
 cargo add fark
@@ -24,7 +24,7 @@ cargo add fark
 cargo add fark -F actix
 ```
 
-## ✨ Quick Start For Actix Framework
+##  Quick Start For Actix Framework
 
 ### Local (email/password) Sign-In
 
@@ -196,7 +196,7 @@ async fn main() -> std::io::Result<()> {
 ### More Auth Strategy Coming Soon
 
 
-## 🧠 Core Concepts
+## Core Concepts
 
 - **Strategy**  
   A pluggable auth method — email/password, OAuth2 provider, JWT, WebAuthn, etc.
@@ -207,7 +207,7 @@ async fn main() -> std::io::Result<()> {
 
 
 
-## 🛠️ Philosophy
+##  Philosophy
 
 - **No framework lock-in**  
   Core is pure Rust logic.
@@ -218,7 +218,7 @@ async fn main() -> std::io::Result<()> {
 - **Security-first defaults**  
   Safe defaults; opt-in behaviors.
 
-## 📄 License
+##  License
 
 MIT
 
