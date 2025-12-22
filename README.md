@@ -2,7 +2,7 @@
 
 **Framework-agnostic Authentication Kernel for Rust**
 
-`fark` is a unified, strategy-based authentication library for Rust. It provides a clean core API for identity verification and strategy orchestration, with optional feautures for major web frameworks like Actix-web, Axum, and Rocket.
+`fark` is a unified, strategy-based authentication library for Rust. It provides a clean core API for identity verification and strategy orchestration, with optional features for major web frameworks like Actix-web, Axum, and Rocket.
 
 > Build once. Use everywhere. No framework coupling.
 
