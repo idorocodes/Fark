@@ -29,7 +29,7 @@ cargo add fark -F actix
 ### Local (email/password) Sign-In
 
 ```rust
-    use actix_service::{Service, Transform};
+use actix_service::{Service, Transform};
 use actix_web::{
     App, Error, HttpResponse, HttpServer, Responder,
     dev::ServiceRequest,
