@@ -194,7 +194,7 @@ async fn main() -> std::io::Result<()> {
 ```
 
 ### More Auth Strategy Coming Soon
-```
+
 
 ## 🧠 Core Concepts
 
