@@ -20,7 +20,7 @@
 
 ```bash
 cargo add fark
-# and for Actix adapter
+# and for Actix features 
 cargo add fark -F actix
 ```
 
